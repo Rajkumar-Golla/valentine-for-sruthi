@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valentine 💘</title>
+
+    <style>
+        :root {
+            --pink1: #ffd6e8;
+            --pink2: #ffe8f2;
+            --yes: #e83a5a;
+            --yes2: #ff5c7a;
+            --card: rgba(255, 255, 255, 0.78);
+            --shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+            background:
+                radial-gradient(1200px 600px at 20% 20%, var(--pink1), transparent 60%),
+                radial-gradient(1000px 600px at 80% 70%, var(--pink2), transparent 55%),
+                linear-gradient(135deg, #ffeef6, #fbe7ff);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hearts {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .45;
+        }
+
+        .heart {
+            position: absolute;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            from { transform: translateY(120vh) rotate(0); opacity: 0; }
+            10% { opacity: .9; }
+            to { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+
+        .card {
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            border-radius: 26px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+            text-align: center;
+            max-width: 90vw;
+        }
+
+        h1 {
+            font-size: clamp(32px, 5vw, 56px);
+            margin-bottom: 10px;
+        }
+
+        .sub { color: #444; }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .yes-slot, .no-slot {
+            width: 220px;
+            height: 220px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button {
+            border: none;
+            padding: 14px 26px;
+            font-size: 18px;
+            border-radius: 14px;
+            cursor: pointer;
+        }
+
+        .yes {
+            background: linear-gradient(180deg, var(--yes2), var(--yes));
+            color: white;
+            font-weight: bold;
+        }
+
+        .no.evading {
+            position: absolute;
+        }
+
+        .hidden { display: none; }
+
+        .yay {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        .gifbox img {
+            max-width: 100%;
+            border-radius: 16px;
+            margin-top: 15px;
+        }
+
+        .confetti {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .confetti i {
+            position: absolute;
+            width: 10px;
+            height: 16px;
+            animation: fall 2s linear infinite;
+        }
+
+        @keyframes fall {
+            from { transform: translateY(-20vh) rotate(0); opacity: 1; }
+            to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<div class="card" id="askCard">
+    <h1>Sruthi,<br>will you be my Valentine? 💖</h1>
+    <p class="sub">Choose wisely 😌</p>
+
+    <div class="row">
+        <div class="yes-slot">
+            <button class="yes" id="yesBtn">YES</button>
+        </div>
+
+        <div class="no-slot" id="noSlot">
+            <button class="no" id="noBtn">NO</button>
+        </div>
+    </div>
+</div>
+
+<div class="card hidden" id="yayCard">
+    <div class="yay">💖 YAY!!! 💖</div>
+    <p>Best decision ever 😘</p>
+
+    <div class="gifbox">
+        <img src="Rishi.jpg" alt="Love">
+    </div>
+
+    <h3>I love you ❤️</h3>
+</div>
+
+<div class="confetti hidden" id="confetti"></div>
+
+<script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const noSlot = document.getElementById("noSlot");
+    const askCard = document.getElementById("askCard");
+    const yayCard = document.getElementById("yayCard");
+    const confetti = document.getElementById("confetti");
+
+    noBtn.addEventListener("mouseenter", moveNo);
+    noBtn.addEventListener("click", moveNo);
+
+    function moveNo() {
+        const bw = noSlot.clientWidth - noBtn.offsetWidth;
+        const bh = noSlot.clientHeight - noBtn.offsetHeight;
+
+        noBtn.classList.add("evading");
+        noBtn.style.left = Math.random() * bw + "px";
+        noBtn.style.top = Math.random() * bh + "px";
+    }
+
+    yesBtn.onclick = () => {
+        askCard.classList.add("hidden");
+        yayCard.classList.remove("hidden");
+        startConfetti();
+    };
+
+    function startConfetti() {
+        confetti.classList.remove("hidden");
+        for (let i = 0; i < 80; i++) {
+            const p = document.createElement("i");
+            p.style.left = Math.random() * 100 + "vw";
+            p.style.background = `hsl(${Math.random()*360} 90% 60%)`;
+            confetti.appendChild(p);
+        }
+    }
+
+    const hearts = document.getElementById("hearts");
+    const emojis = ["💖","💗","💞","💕"];
+    for (let i = 0; i < 20; i++) {
+        const h = document.createElement("span");
+        h.className = "heart";
+        h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.animationDuration = 6 + Math.random() * 6 + "s";
+        hearts.appendChild(h);
+    }
+</script>
+
+</body>
+</html>
